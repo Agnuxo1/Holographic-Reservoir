@@ -1,0 +1,14 @@
+======================================================================
+CHIMERA VALIDATION EXPERIMENT 1
+Echo State Property (Fading Memory) Test
+
+This experiment tests whether the ASIC system has the
+'fading memory' property required for reservoir computing.
+
+Expected duration: ~15-20 minutes
+======================================================================
+
+Miner IP: 192.168.0.15
+Test condition: 400MHz @ 900mV
+
+Press ENTER to start experiment (or 'q' to quit): 

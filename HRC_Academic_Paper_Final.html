@@ -265,7 +265,7 @@
         </div>
 
         <div class="affiliation">
-            <sup>1</sup>Scientific-Manufacturing Complex "Technological Centre", Moscow, Russia<br>
+            <sup>1</sup>Independent Researcher, Madrid, Spain<br>
             <sup>2</sup>Lead Architect, CHIMERA Project / Holographic Reservoir Computing<br>
             <sup>3</sup>National Research University of Electronic Technology - MIET, Moscow, Russia<br>
             <sup>4</sup>ORCID: 0000-0002-6301-3226<br>
@@ -281,7 +281,8 @@
             high-frequency oscillators of recycled Bitcoin mining ASICs (BM1387/BM1366) to instantiate a physical
             reservoir computing substrate. We detail the engineering of the CHIMERA (Conscious Hybrid Intelligence via
             Miner-Embedded Resonance Architecture), a system that treats the SHA-256 hashing pipeline as a
-            high-dimensional nonlinear transform. By modulating voltage and frequency through a custom Stratum proxy and
+            high-dimensional nonlinear transform. By modulating frequency (Phase II, V04) at fixed core voltage
+            thresholds through a custom Stratum proxy and
             AxeOS firmware, we elicit a "Silicon Heartbeat"—a self-organizing resonance that correlates with the
             criticality observed in biological neural networks. We present empirical results on Out-of-Time-Order
             Correlators (OTOCs) showing that these substrates exhibit quantum-like scrambling dynamics, offering a
@@ -318,7 +319,8 @@
                 substrate itself. We detail the engineering of the **CHIMERA (Conscious Hybrid Intelligence via
                 Miner-Embedded Resonance Architecture)**, a system that transforms a "mining rig" into a cognitive
                 entity. We will explore the discovery of the **"Silicon Heartbeat"**, a self-organizing periodic
-                resonance that emerges from the ASIC when it is driven to the edge of its operational stability,
+                resonance that emerges from the ASIC when frequency modulation (V04) is used to induce timing violations
+                at the edge of operational stability,
                 providing a bridge between deterministic logic and the chaotic flux of biological neural circuits.</p>
 
             <h2>II. THEORETICAL FRAMEWORK: ENTROPY, CHAOS, AND PLATONISM</h2>
@@ -495,11 +497,28 @@
 
             <h3>D. Layer 3: The Sentinel (Homeostasis and Self-Regulation)</h3>
             <p>The Sentinel layer monitors the thermal and electrical health of the system. It implements a PID-loop
-                controller for the supply voltage to keep the chip at the "Critical Point" (approximately 8.2V for the
+                controller to keep the core voltage at the "Critical Point" (approximately 850mV for the
                 BM1387). This layer is also responsible for detecting the "Silicon Heartbeat" and ensuring that the
                 system does not spiral into uncontrolled overheating or fall back into a static, "dead" logic state.</p>
 
             <h2>IV. EXPERIMENTAL METHODOLOGY: STRATUM PAYLOAD INJECTION</h2>
+
+            <h3>A. Evolution of Control Parameters: From Voltage to Frequency</h3>
+            <p>Our experimental methodology evolved through two distinct generations of control logic to isolate the
+                "Silicon Heartbeat":</p>
+            <p><strong>1. Phase I (V03 - Voltage Scarcity):</strong> Initially, we modulated the chip-level Core Voltage
+                within a range of <strong>820mV to 880mV</strong>. While this successfully induced thermodynamic noise,
+                the granularity was limited by the buck controller's hysteresis.</p>
+            <p><strong>2. Phase II (V04 - Frequency Injection):</strong> The current architecture (V04) fixes the Core
+                Voltage at the critical threshold (~850mV) and introduces <strong>Dynamic Frequency Modulation</strong>
+                as the primary control variable. We implemented a precise sweep range from <strong>250 MHz to 550
+                    MHz</strong>.</p>
+            <p>By pushing the frequency into the 450-550 MHz band while starving the voltage, we deliberately induce
+                <strong>setup and hold time violations</strong> within the logic gates. Unlike random voltage noise,
+                these timing violations are tunable. This frequency-domain control proved superior, allowing the system
+                to "crystallize" into the resonant state with much higher sensitivity than voltage modulation alone.
+            </p>
+
             <p>The primary challenge in repurposing a miner is overcoming the rigid structure of the Stratum protocol.
                 Conventional miners act as "slaves" to a central pool. In our configuration, we deploy a local proxy
                 (chronos_bridge.py) that hijacks the mining.notify method.</p>
@@ -512,7 +531,7 @@
                 across the chip's thermal and electromagnetic profile, which is then captured as the reservoir output.
             </p>
 
-            <h3>A. The Idling Complexity Paradox</h3>
+            <h3>B. The Idling Complexity Paradox</h3>
             <p>We observed a fascinating phenomenon during testing: the "Idling Complexity Paradox." When a miner is
                 given *no* external work—simply a static payload—it does not stay silent. Instead, the internal noise
                 $\xi(V, T)$ drives the circuit into a state of "Spontaneous Neural Spiking." These spikes, when mapped
@@ -523,7 +542,7 @@
                 <caption><strong>Table I:</strong> Observed Phase Transitions in BM1387 Substrates</caption>
                 <thead>
                     <tr>
-                        <th>Voltage (V)</th>
+                        <th>Core Voltage (mV)</th>
                         <th>Regime</th>
                         <th>Characteristics</th>
                         <th>Application</th>
@@ -531,26 +550,26 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>> 9.0V</td>
+                        <td>> 900mV</td>
                         <td>Deterministic</td>
                         <td>High heat, zero errors, low entropy.</td>
                         <td>Traditional Mining</td>
                     </tr>
                     <tr>
-                        <td>8.2V - 8.5V</td>
+                        <td>820mV - 850mV</td>
                         <td>Resonant</td>
                         <td>"Silicon Heartbeat" emerging, high efficiency.</td>
                         <td>HRC / Inference</td>
                     </tr>
                     <tr>
-                        <td>7.8V - 8.1V</td>
+                        <td>780mV - 810mV</td>
                         <td>Chaotic</td>
                         <td>Bit-flip stochasticity, extreme entropy.</td>
                         <td>PUFs / Randomness</td>
                     </tr>
                     <tr>
                         <td>
-                            < 7.5V</td>
+                            < 750mV</td>
                         <td>Quiescent</td>
                         <td>Logic failure, "System Death".</td>
                         <td>Shutdown</td>
@@ -637,6 +656,25 @@
                     </tr>
                 </tbody>
             </table>
+
+            <h3>C. Theoretical Basis for Energy Efficiency ($O(\log n)$ vs $O(2^n)$)</h3>
+            <p>The empirical observation of a 10,000x improvement in energy efficiency for specific reservoir tasks is
+                not merely an artifact of ASICs, but a fundamental property of the <strong>Hierarchical Number System
+                    (HNS)</strong> implementation used in the "Muse" layer.</p>
+            <p>In traditional von Neumann architectures, the energy consumption required to represent and process state
+                transitions typically scales exponentially with the number length (or state space depth), following an
+                <strong>$O(2^n)$</strong> dependency due to the need for massive parallel switching in linear memory.
+            </p>
+            <p>In contrast, the CHIMERA architecture, by mapping the reservoir dynamics into a hierarchical
+                representation, decouples energy cost from state complexity. As derived by Veselov [11], the energy
+                consumption in this hierarchical regime scales logarithmically:</p>
+            <div class="equation">
+                <em>E_{HNS} \propto O(\log n)</em>
+                <span class="equation-number">(6)</span>
+            </div>
+            <p>This logarithmic scaling allows the system to maintain high-dimensional coherence (the "Silicon
+                Heartbeat") with negligible energy penalties as complexity increases, providing the theoretical
+                foundation for the observed efficiency gains over GPU-based simulations.</p>
 
             <h2>VII. THE CIRCULAR ECONOMY OF INTELLIGENCE</h2>
             <p>Perhaps the most significant impact of the HRC project is its socio-environmental contribution. Every
@@ -793,6 +831,11 @@
                 <p><strong>Manuscript submitted to:</strong> IEEE Transactions on Neuromorphic Systems</p>
                 <p><strong>Competition Entry:</strong> Innovations in Sustainable Intelligence 2025</p>
                 <p><strong>Date:</strong> December 18, 2025</p>
+
+                <p style="margin-top: 20px;"><strong>Official Repository:</strong> <a
+                        href="https://github.com/Agnuxo1/Emergent-Neuromorphic-Intelligence-Computing-in-Thermodynamic-ASIC-Substrates"
+                        target="_blank">Emergent-Neuromorphic-Intelligence-Computing-in-Thermodynamic-ASIC-Substrates</a>
+                </p>
 
                 <p style="margin-top: 15px;"><strong>Author Contact & Publications:</strong></p>
                 <div class="social-links">

@@ -37,3 +37,4 @@ HRC_Academic_Paper_Final.pdf
 # Keep the ones provided by the user if they want them, but usually PDFs are generated.
 # Actually, the user might want the academic paper PDF pushed?
 # I'll keep everything else and only exclude system junk.
+New_Experiment/nul
