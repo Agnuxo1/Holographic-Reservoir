@@ -60,3 +60,39 @@ class VeselovLayer:
     def get_state_snapshot(self):
         """Returns the current holographic state."""
         return self.state_vector
+
+
+# ---------------------------------------------------------------------------
+# Backwards-compat alias. Legacy code imports `VeselovExpander`. In v1.0 the
+# canonical class is `VeselovLayer`; we keep the old name working so that
+# `holographic_reservoir.core.reservoir` imports do not crash on load.
+# ---------------------------------------------------------------------------
+class VeselovExpander(VeselovLayer):
+    """Alias of :class:`VeselovLayer` kept for backwards compatibility.
+
+    The legacy constructor accepted ``n_input``, ``n_reservoir`` and ``degree``
+    keyword arguments. We accept and ignore the extra ones, using
+    ``n_reservoir`` (or ``size``) for the graph dimension.
+    """
+
+    def __init__(self, n_input=256, n_reservoir=256, degree=6, size=None, **kwargs):
+        s = size if size is not None else n_reservoir
+        super().__init__(size=s)
+        self.n_input = n_input
+        self.n_reservoir = n_reservoir
+        self.degree = degree
+
+    def propagate(self, input_layer):
+        """Compatibility shim: accepts a 2D input matrix and returns the new state."""
+        import numpy as _np
+        arr = _np.asarray(input_layer, dtype=_np.float64)
+        flat = arr.flatten()
+        padded = _np.zeros(len(self.adj))
+        n = min(len(flat), len(padded))
+        padded[:n] = flat[:n]
+        self.state_vector = _np.tanh(self.adj.dot(self.state_vector) * 0.9 + padded)
+        # Map back to the expected (size, 4) shape used by reservoir.py
+        out = _np.zeros((self.n_reservoir, 4), dtype=_np.float64)
+        s = self.state_vector[: self.n_reservoir]
+        out[: len(s), 0] = s
+        return out

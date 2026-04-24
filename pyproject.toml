@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "holographic-reservoir"
+version = "1.0.0"
+description = "Holographic Reservoir Computing Framework — pure-Python simulation with optional ASIC hardware backend."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Francisco Angulo de Lafuente", email = "agnuxo1@gmail.com" },
+]
+keywords = [
+    "reservoir-computing",
+    "neuromorphic",
+    "echo-state-network",
+    "holographic",
+    "asic",
+    "simulation",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.23",
+]
+
+[project.optional-dependencies]
+hardware = [
+    "requests>=2.28",
+    "scipy>=1.10",
+]
+dev = [
+    "pytest>=7.0",
+    "build>=1.0",
+    "twine>=4.0",
+]
+
+[project.scripts]
+holographic-reservoir = "holographic_reservoir.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Agnuxo1/Holographic-Reservoir"
+Source = "https://github.com/Agnuxo1/Holographic-Reservoir"
+Issues = "https://github.com/Agnuxo1/Holographic-Reservoir/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["holographic_reservoir*"]
+exclude = ["tests*", "archive*", "docs*", "experiments*", "V02*", "V03*", "V04*", "New_Experiment*", "reference_repo*", "firmware*", "Luck-Miner_LV06*", "REAL_DATA_LV06*"]
