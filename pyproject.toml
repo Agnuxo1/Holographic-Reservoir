@@ -58,3 +58,7 @@ Issues = "https://github.com/Agnuxo1/Holographic-Reservoir/issues"
 where = ["."]
 include = ["holographic_reservoir*"]
 exclude = ["tests*", "archive*", "docs*", "experiments*", "V02*", "V03*", "V04*", "New_Experiment*", "reference_repo*", "firmware*", "Luck-Miner_LV06*", "REAL_DATA_LV06*"]
+
+[tool.pytest.ini_options]
+# The v1 suite is intentionally isolated from legacy hardware experiments.
+testpaths = ["tests"]
