@@ -20,6 +20,8 @@ def test_cli_info():
     assert rc == 0
     assert "holographic-reservoir" in out
     assert "simulation" in out
+    assert "unexpected" not in out
+    assert "configured" in out
 
 
 def test_cli_demo_small():
