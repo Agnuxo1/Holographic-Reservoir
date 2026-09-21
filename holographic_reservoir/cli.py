@@ -50,10 +50,10 @@ def cmd_info(args) -> int:
     print(f"holographic-reservoir {__version__}")
     print(f"  simulation backend: available (pure NumPy + SHA-256)")
     try:
-        AxeOSBackend(endpoint="0.0.0.0:0")  # will fail validation path
-        hw = "unexpected"
+        AxeOSBackend(endpoint="0.0.0.0:0")  # validates configuration without connecting
+        hw = "configured (opt-in; connection is tested only when used)"
     except Exception:
-        hw = "opt-in (requires --hardware axeos --endpoint IP:PORT)"
+        hw = "unavailable (requires --hardware axeos --endpoint IP:PORT)"
     print(f"  axeos backend:      {hw}")
     print("  default:            simulation (no network, no hardware)")
     return 0
