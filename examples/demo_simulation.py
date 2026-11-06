@@ -31,7 +31,7 @@ def main() -> None:
 
     t0 = time.perf_counter()
     model.fit(u[:1000], y[:1000], washout=100)
-    pred = model.predict(u[1000:])
+    pred = model.predict(u)[1000:]
     dt = time.perf_counter() - t0
 
     mse = float(np.mean((pred - y[1000:]) ** 2))

@@ -40,7 +40,7 @@ u, y = series[:-1].reshape(-1, 1), series[1:]
 
 model = HolographicReservoirModel(size=200, random_seed=0)
 model.fit(u[:1000], y[:1000], washout=100)
-mse = ((model.predict(u[1000:]) - y[1000:]) ** 2).mean()
+mse = ((model.predict(u)[1000:] - y[1000:]) ** 2).mean()
 print(f"MSE = {mse:.3e}")
 ```
 
