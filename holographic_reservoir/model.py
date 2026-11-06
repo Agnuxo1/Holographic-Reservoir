@@ -129,6 +129,11 @@ class HolographicReservoirModel:
         return self
 
     def predict(self, u: np.ndarray) -> np.ndarray:
+        """Predict from ``u``, starting the reservoir state at zero.
+
+        To score a held-out segment, pass the whole sequence and slice the
+        result: a segment passed alone has no washout.
+        """
         if self.W_out is None:
             raise RuntimeError("Model not fitted; call fit() first.")
         u = np.atleast_2d(u.astype(np.float64))
@@ -149,6 +154,7 @@ class HolographicReservoirModel:
         y = series[1:]
         split = int(len(u) * train_frac)
         self.fit(u[:split], y[:split], washout=washout)
-        pred = self.predict(u[split:])
+        # Run over the whole series so the state carries into the test segment.
+        pred = self.predict(u)[split:]
         mse = float(np.mean((pred - y[split:]) ** 2))
         return mse, pred, y[split:]

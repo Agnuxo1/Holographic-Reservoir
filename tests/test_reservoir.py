@@ -34,3 +34,12 @@ def test_mackey_glass_mse_threshold():
     # One-step Mackey-Glass prediction: a small reservoir with ridge readout
     # should comfortably stay under 0.1 MSE on the normalised series.
     assert mse < 1e-1, f"MSE too high: {mse}"
+
+
+def test_benchmark_carries_state_into_test_segment():
+    # Regression: scoring the test segment alone restarted the state at zero
+    # with no washout, which inflated the seed-0 MSE to about 3e-2.
+    model = HolographicReservoirModel(size=200, random_seed=0)
+    mse, pred, target = model.mackey_glass_benchmark(n=1500)
+    assert mse < 1e-4, f"MSE too high: {mse}"
+    assert np.max(np.abs(pred[:10] - target[:10])) < 1e-2
